@@ -1,0 +1,51 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
+  consumer_one:
+    build: ./consumer_one
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    ports:
+      - "5000:5000"
+
+  consumer_two:
+    build: ./consumer_two
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  consumer_three:
+    build: ./consumer_three
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  consumer_four:
+    build: ./consumer_four
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:
